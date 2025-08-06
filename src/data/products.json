@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Vue.js Essentials E-Book",
+    "price": 14.99,
+    "shortDescription": "A comprehensive guide to mastering Vue.js.",
+    "thumbnailUrl": "https://via.placeholder.com/96x96?text=Vue+E-Book"
+  },
+  {
+    "id": 2,
+    "name": "JavaScript Mastery Course",
+    "price": 39.99,
+    "shortDescription": "An online course to become a JS pro.",
+    "thumbnailUrl": "https://via.placeholder.com/96x96?text=JS+Course"
+  },
+  {
+    "id": 3,
+    "name": "Pro Productivity App License",
+    "price": 9.99,
+    "shortDescription": "Unlock premium features in our productivity app.",
+    "thumbnailUrl": "https://via.placeholder.com/96x96?text=Productivity+App"
+  },
+  {
+    "id": 4,
+    "name": "React for Beginners E-Book",
+    "price": 12.49,
+    "shortDescription": "Start your React journey with this e-book.",
+    "thumbnailUrl": "https://via.placeholder.com/96x96?text=React+E-Book"
+  },
+  {
+    "id": 5,
+    "name": "Python Data Science Course",
+    "price": 29.99,
+    "shortDescription": "Learn data science with Python in this online course.",
+    "thumbnailUrl": "https://via.placeholder.com/96x96?text=Python+Course"
+  }
+]
