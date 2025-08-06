@@ -1,3 +1,29 @@
+<script lang="ts" setup>
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useProductsStore } from '@/stores/products'
+import type { Product } from '@/types/index'
+import Tag from 'primevue/tag'
+import ProgressSpinner from 'primevue/progressspinner'
+import Card from 'primevue/card'
+import Button from 'primevue/button'
+
+const route = useRoute()
+const router = useRouter()
+const store = useProductsStore()
+const product = ref<Product | null>(null)
+
+onMounted(async () => {
+  if (store.products.length === 0) {
+    await store.fetchProducts()
+  }
+  product.value = store.getProductById(route.params.id as string)
+  if (!product.value) {
+    router.replace({ name: 'NotFound' })
+  }
+})
+</script>
+
 <template>
   <div class="container mx-auto p-4">
     <router-link to="/products" class="mb-4 inline-block">
@@ -46,31 +72,5 @@
     </div>
   </div>
 </template>
-
-<script lang="ts" setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useProductsStore } from '@/stores/products'
-import type { Product } from '@/types/index'
-import Tag from 'primevue/tag'
-import ProgressSpinner from 'primevue/progressspinner'
-import Card from 'primevue/card'
-import Button from 'primevue/button'
-
-const route = useRoute()
-const router = useRouter()
-const store = useProductsStore()
-const product = ref<Product | null>(null)
-
-onMounted(async () => {
-  if (store.products.length === 0) {
-    await store.fetchProducts()
-  }
-  product.value = store.getProductById(route.params.id as string)
-  if (!product.value) {
-    router.replace({ name: 'NotFound' })
-  }
-})
-</script>
 
 <style scoped></style>
