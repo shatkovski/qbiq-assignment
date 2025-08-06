@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useProductsStore } from '@/stores/products'
 import InputText from 'primevue/inputtext'
 import Card from 'primevue/card'
@@ -14,9 +14,19 @@ onMounted(() => {
 })
 
 const filter = ref('')
+const debouncedFilter = ref('')
+let debounceTimeout: ReturnType<typeof setTimeout> | null = null
+
+watch(filter, (val) => {
+  if (debounceTimeout) clearTimeout(debounceTimeout)
+  debounceTimeout = setTimeout(() => {
+    debouncedFilter.value = val
+  }, 300)
+})
+
 const filteredProducts = computed(() => {
   return store.products.filter((product) =>
-    product.name.toLowerCase().includes(filter.value.toLowerCase()),
+    product.name.toLowerCase().includes(debouncedFilter.value.toLowerCase()),
   )
 })
 </script>
