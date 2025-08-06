@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 import { useProductsStore } from '@/stores/products'
+import InputText from 'primevue/inputtext'
+import Card from 'primevue/card'
+import ProgressSpinner from 'primevue/progressspinner'
 
 const store = useProductsStore()
 
@@ -21,29 +24,33 @@ const filteredProducts = computed(() => {
 <template>
   <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">Product List</h1>
-    <input
-      v-model="filter"
-      type="text"
-      placeholder="Filter products by name..."
-      class="border rounded px-3 py-2 mb-4 w-full"
-    />
-    <div v-if="store.loading" class="text-center py-8 text-gray-500">Loading products...</div>
+    <InputText v-model="filter" placeholder="Filter products by name..." class="mb-4 w-full" />
+    <div v-if="store.loading" class="flex justify-center py-8">
+      <ProgressSpinner style="width: 50px; height: 50px" strokeWidth="4" />
+    </div>
     <div v-else-if="store.error" class="text-center py-8 text-red-500">{{ store.error }}</div>
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <router-link
         v-for="product in filteredProducts"
         :key="product.id"
         :to="`/products/${product.id}`"
-        class="border rounded p-4 flex flex-col items-center transition hover:shadow-lg hover:bg-gray-50"
         style="text-decoration: none; color: inherit"
       >
-        <img
-          :src="product.thumbnailUrl"
-          :alt="product.name"
-          class="w-24 h-24 object-cover mb-2 rounded"
-        />
-        <div class="font-semibold">{{ product.name }}</div>
-        <div class="text-gray-600">${{ product.price }}</div>
+        <Card class="transition-transform duration-200 hover:-translate-y-1 cursor-pointer">
+          <template #header>
+            <img
+              :src="product.thumbnailUrl"
+              :alt="product.name"
+              class="w-24 h-24 object-cover mb-2 rounded mx-auto"
+            />
+          </template>
+          <template #title>
+            <div class="font-semibold text-center">{{ product.name }}</div>
+          </template>
+          <template #content>
+            <div class="text-gray-600 text-center">${{ product.price }}</div>
+          </template>
+        </Card>
       </router-link>
     </div>
   </div>

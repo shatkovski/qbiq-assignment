@@ -2,6 +2,13 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { Product } from '@/types/index'
 
+async function mockFetch(): Promise<Product[]> {
+  await new Promise((resolve) => setTimeout(resolve, 500))
+  const res = await fetch('/src/data/products.json')
+  if (!res.ok) throw new Error('Failed to load products')
+  return res.json()
+}
+
 export const useProductsStore = defineStore('products', () => {
   const products = ref<Product[]>([])
   const productsById = ref<Map<string, Product>>(new Map())
@@ -12,9 +19,7 @@ export const useProductsStore = defineStore('products', () => {
     loading.value = true
     error.value = null
     try {
-      const res = await fetch('/src/data/products.json')
-      if (!res.ok) throw new Error('Failed to load products')
-      const data: Product[] = await res.json()
+      const data: Product[] = await mockFetch()
       products.value = data
       productsById.value = new Map(data.map((p) => [p.id, p]))
     } catch (e: unknown) {
