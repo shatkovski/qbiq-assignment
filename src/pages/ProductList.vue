@@ -25,9 +25,8 @@ watch(filter, (val) => {
 })
 
 const filteredProducts = computed(() => {
-  return store.products.filter((product) =>
-    product.name.toLowerCase().includes(debouncedFilter.value.toLowerCase()),
-  )
+  const filterValue = debouncedFilter.value.toLowerCase()
+  return store.products.filter((product) => product.name.toLowerCase().includes(filterValue))
 })
 </script>
 
