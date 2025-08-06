@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import type { Product } from '@/types/index'
+import products from '@/data/products.json'
 
-async function mockFetch(): Promise<Product[]> {
+export async function mockFetch(): Promise<Product[]> {
   await new Promise((resolve) => setTimeout(resolve, 500))
-  const res = await fetch('/src/data/products.json')
-  if (!res.ok) throw new Error('Failed to load products')
-  return res.json()
+  return products as Product[]
 }
 
 export const useProductsStore = defineStore('products', () => {
