@@ -1,26 +1,18 @@
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
-import type { Product } from '@/types/product'
+import { computed, onMounted, ref } from 'vue'
+import { useProductsStore } from '@/stores/products'
 
-const products = ref<Product[]>([])
-const loading = ref(true)
-const error = ref<string | null>(null)
-const filter = ref('')
+const store = useProductsStore()
 
-onMounted(async () => {
-  try {
-    const res = await fetch('/src/data/products.json')
-    if (!res.ok) throw new Error('Failed to load products')
-    products.value = await res.json()
-  } catch (e: unknown) {
-    error.value = e instanceof Error ? e.message : 'Unknown error'
-  } finally {
-    loading.value = false
+onMounted(() => {
+  if (store.products.length === 0) {
+    store.fetchProducts()
   }
 })
 
+const filter = ref('')
 const filteredProducts = computed(() => {
-  return products.value.filter((product) =>
+  return store.products.filter((product) =>
     product.name.toLowerCase().includes(filter.value.toLowerCase()),
   )
 })
@@ -35,8 +27,8 @@ const filteredProducts = computed(() => {
       placeholder="Filter products by name..."
       class="border rounded px-3 py-2 mb-4 w-full"
     />
-    <div v-if="loading" class="text-center py-8 text-gray-500">Loading products...</div>
-    <div v-else-if="error" class="text-center py-8 text-red-500">{{ error }}</div>
+    <div v-if="store.loading" class="text-center py-8 text-gray-500">Loading products...</div>
+    <div v-else-if="store.error" class="text-center py-8 text-red-500">{{ store.error }}</div>
     <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       <router-link
         v-for="product in filteredProducts"
